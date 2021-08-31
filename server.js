@@ -2,8 +2,6 @@ const express = require('express');
 const path = require('path');
 const Rollbar = require('rollbar')
 
-// app.use(express.json())
-
 let rollbar = new Rollbar({
     accessToken: 'c02195e5da154bfea06f028332fcb1fc',
     captureUncaught: true,
@@ -20,7 +18,7 @@ app.get('/', (req, res) => {
 });
 
 app.post('/api/student', (req, res) => {
-    let { name } = req.body
+    const { name } = req.body
     name = name.trim()
     students.push(name)
 
@@ -31,8 +29,10 @@ app.post('/api/student', (req, res) => {
 })
 
 const port = process.env.PORT || 4545;
+app.use(express.json())
 
 app.use(rollbar.errorHandler())
+
 
 app.listen(port, () => {
     console.log(`running on port ${port}`)
