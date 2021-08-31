@@ -17,15 +17,21 @@ app.get('/', (req, res) => {
     rollbar.info('html file served successfully')
 });
 
-app.post('/api/student', (req, res) => {
-    const { name } = req.body
+app.post('/api/student', (req, res)=>{
+    let {name} = req.body
     name = name.trim()
-    students.push(name)
 
-    rollbar.log('Student added sucessfully', {author: 'Carston', type: "manual entry"})
+    const index = students.findIndex(studentName => studentName === name)
 
+    if(index === -1 && name !== ''){
+        students.push(name)
+        res.status(200).send(students)
+    } else if (name === ''){
+        res.status(400).send('must provide a name.')
+    } else {
+        res.status(400).send('that student already exists')
+    }
 
-    res.status(200).send(students)
 })
 
 const port = process.env.PORT || 4545;
