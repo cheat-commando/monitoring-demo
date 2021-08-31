@@ -11,11 +11,15 @@ let rollbar = new Rollbar({
 const students = []
 
 const app = express();
+app.use(express.json())
+
+app.get('/style', express.static('./public/styles.css'))
 
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, './public/index.html'))
     rollbar.info('html file served successfully')
 });
+
 
 app.post('/api/student', (req, res)=>{
     let {name} = req.body
@@ -35,7 +39,6 @@ app.post('/api/student', (req, res)=>{
 })
 
 const port = process.env.PORT || 4545;
-app.use(express.json())
 
 app.use(rollbar.errorHandler())
 
